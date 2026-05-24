@@ -5,20 +5,31 @@ import { analyzeSketch } from '../../lib/gemini';
 import { useIsMobile } from '../../hooks/useMediaQuery';
 import toast from 'react-hot-toast';
 
+import { useCanvasStore } from '../../store/canvasStore';
+
 const AIButton = () => {
   const isMobile = useIsMobile();
   const { setAIPanelOpen } = useUIStore();
+  const { stageRef, elements } = useCanvasStore();
   const [loading, setLoading] = useState(false);
 
   const handleAIEnhance = async () => {
-    const stage = document.querySelector('.konvajs-content canvas');
-    if (!stage) return;
+    if (!stageRef) {
+        toast.error('Canvas not ready');
+        return;
+    }
+
+    if (elements.length === 0) {
+        toast.error('Draw something first! ✨');
+        return;
+    }
 
     setLoading(true);
     toast.loading('Analyzing sketch...', { id: 'ai-status' });
 
     try {
-      const dataUrl = stage.toDataURL();
+      // Capture only the visible area with high quality
+      const dataUrl = stageRef.toDataURL({ pixelRatio: 2 });
       const result = await analyzeSketch(dataUrl);
       
       // Store result in UI store or pass it to panel

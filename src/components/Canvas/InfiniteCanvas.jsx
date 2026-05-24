@@ -14,8 +14,15 @@ const InfiniteCanvas = () => {
     stagePos, setStagePos, 
     stageScale, setStageScale,
     elements, setElements,
-    selectedIds, setSelectedIds
+    selectedIds, setSelectedIds,
+    setStageRef
   } = useCanvasStore();
+
+  useEffect(() => {
+    if (stageRef.current) {
+        setStageRef(stageRef.current);
+    }
+  }, [setStageRef]);
   
   const { activeTool } = useUIStore();
 

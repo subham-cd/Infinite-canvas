@@ -26,4 +26,8 @@ export const useCanvasStore = create((set, get) => ({
   // Drawing state
   isDrawing: false,
   setIsDrawing: (isDrawing) => set({ isDrawing }),
+
+  // Stage Ref for exports/AI
+  stageRef: null,
+  setStageRef: (ref) => set({ stageRef: ref }),
 }));

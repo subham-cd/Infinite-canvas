@@ -21,11 +21,13 @@ function App() {
     <div className="relative w-screen h-screen overflow-hidden bg-inkmind-bg text-slate-200">
       <Toaster position={isMobile ? "top-center" : "bottom-right"} />
       
+      {/* Background Canvas */}
+      <InfiniteCanvas />
+
+      {/* Overlays */}
       <TopToolbar />
       {!isMobile && <LeftToolbar />}
       {isMobile && <BottomNavBar />}
-      
-      <InfiniteCanvas />
       
       <AIButton />
       {!isMobile && <AIResultPanel />}
