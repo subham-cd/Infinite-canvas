@@ -2,6 +2,10 @@ import { create } from 'zustand';
 
 export const useCanvasStore = create((set, get) => ({
   elements: [],
+  isLoading: true,
+  setIsLoading: (isLoading) => set({ isLoading }),
+  currentElement: null,
+  setCurrentElement: (element) => set({ currentElement: element }),
   setElements: (elements) => set({ elements }),
   addElement: (element) => set((state) => ({ 
     elements: [...state.elements, element] 

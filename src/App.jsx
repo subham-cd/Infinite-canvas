@@ -1,9 +1,7 @@
 import React from 'react';
 import InfiniteCanvas from './components/Canvas/InfiniteCanvas';
 import TopToolbar from './components/Toolbar/TopToolbar';
-import LeftToolbar from './components/Toolbar/LeftToolbar';
-import BottomNavBar from './components/Toolbar/BottomNavBar';
-import MobileStylePanel from './components/Mobile/MobileStylePanel';
+import BottomToolbar from './components/Toolbar/BottomToolbar';
 import AIButton from './components/AI/AIButton';
 import AIResultPanel from './components/AI/AIResultPanel';
 import MobileAIPanel from './components/Mobile/MobileAIPanel';
@@ -26,14 +24,11 @@ function App() {
 
       {/* Overlays */}
       <TopToolbar />
-      {!isMobile && <LeftToolbar />}
-      {isMobile && <BottomNavBar />}
+      <BottomToolbar />
       
       <AIButton />
       {!isMobile && <AIResultPanel />}
       {isMobile && <MobileAIPanel />}
-      
-      {isMobile && <MobileStylePanel />}
     </div>
   );
 }

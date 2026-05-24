@@ -4,18 +4,20 @@ import { saveCanvas, loadCanvas } from '../lib/canvasSave';
 import toast from 'react-hot-toast';
 
 export const useCanvas = () => {
-  const { elements, setElements } = useCanvasStore();
+  const { elements, setElements, setIsLoading } = useCanvasStore();
 
   // Load canvas on mount
   useEffect(() => {
     const initLoad = async () => {
+      setIsLoading(true);
       const data = await loadCanvas();
       if (data) {
         setElements(data);
       }
+      setIsLoading(false);
     };
     initLoad();
-  }, [setElements]);
+  }, [setElements, setIsLoading]);
 
   // Auto-save every 30 seconds
   useEffect(() => {

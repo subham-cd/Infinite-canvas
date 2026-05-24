@@ -13,12 +13,14 @@ export const useUIStore = create((set) => ({
   strokeWidth: 2,
   opacity: 1,
   lineStyle: 'solid', // 'solid', 'dashed', 'dotted'
+  eraserSize: 40,
   
   setStrokeStyle: (color) => set({ strokeStyle: color }),
   setFillStyle: (color) => set({ fillStyle: color }),
   setStrokeWidth: (width) => set({ strokeWidth: width }),
   setOpacity: (opacity) => set({ opacity: opacity }),
   setLineStyle: (style) => set({ lineStyle: style }),
+  setEraserSize: (size) => set({ eraserSize: size }),
   
   // Mobile UI
   isStylePanelOpen: false,

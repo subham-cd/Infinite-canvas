@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useUIStore } from '../store/uiStore';
 import { useCanvasStore } from '../store/canvasStore';
 import { useHistoryStore } from '../store/historyStore';
+import { saveCanvas as fbSaveCanvas } from '../lib/canvasSave';
 
 export const useKeyboard = () => {
   const { setActiveTool, activeTool } = useUIStore();
@@ -10,44 +11,53 @@ export const useKeyboard = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Don't trigger shortcuts if user is typing in a text field
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const isTyping = e.target.tagName === 'INPUT' || 
+                       e.target.tagName === 'TEXTAREA' || 
+                       e.target.isContentEditable;
 
       const ctrl = e.ctrlKey || e.metaKey;
 
-      // Tool shortcuts
-      if (e.key.toLowerCase() === 'v') setActiveTool('select');
-      if (e.key.toLowerCase() === 'p') setActiveTool('pen');
-      if (e.key.toLowerCase() === 's') setActiveTool('shape');
-      if (e.key.toLowerCase() === 't') setActiveTool('text');
-      if (e.key.toLowerCase() === 'e') setActiveTool('eraser');
-
-      // Undo/Redo
-      if (ctrl && e.key.toLowerCase() === 'z') {
-        if (e.shiftKey) {
-          const next = redo(elements);
-          setElements(next);
-        } else {
-          const prev = undo(elements);
-          setElements(prev);
+      if (!isTyping) {
+        switch (e.key.toLowerCase()) {
+          case 'v': setActiveTool('select'); break;
+          case 'p': setActiveTool('pen'); break;
+          case 's': setActiveTool('shape'); break;
+          case 't': setActiveTool('text'); break;
+          case 'e': setActiveTool('eraser'); break;
+          case 'escape': setSelectedIds([]); break;
+          case 'backspace':
+          case 'delete':
+            if (selectedIds.length > 0) {
+              const latestElements = useCanvasStore.getState().elements;
+              selectedIds.forEach(id => removeElement(id));
+              setSelectedIds([]);
+            }
+            break;
         }
       }
 
-      // Delete
-      if ((e.key === 'Backspace' || e.key === 'Delete') && selectedIds.length > 0) {
-        selectedIds.forEach(id => removeElement(id));
-        setSelectedIds([]);
-      }
-
-      // Select All
-      if (ctrl && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        setSelectedIds(elements.map(el => el.id));
-      }
-      
-      // Escape
-      if (e.key === 'Escape') {
-          setSelectedIds([]);
+      // Ctrl shortcuts
+      if (ctrl) {
+        switch (e.key.toLowerCase()) {
+          case 'z':
+            e.preventDefault();
+            if (e.shiftKey) {
+              const next = redo(elements);
+              if (next) setElements(next);
+            } else {
+              const prev = undo(elements);
+              if (prev) setElements(prev);
+            }
+            break;
+          case 's':
+            e.preventDefault();
+            fbSaveCanvas(elements);
+            break;
+          case 'a':
+            e.preventDefault();
+            setSelectedIds(elements.map(el => el.id));
+            break;
+        }
       }
     };
 

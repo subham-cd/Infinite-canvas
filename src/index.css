@@ -69,3 +69,15 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Canvas Padding for Toolbar */
+.canvas-container {
+  padding-bottom: 80px;
+}
+
+canvas {
+  will-change: transform;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
